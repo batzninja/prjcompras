@@ -1,0 +1,57 @@
+<div [formGroup]="productFormParent">
+  <div formArrayName="products" fxFlex="100" fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="20px">
+    <ng-container *ngFor="let p of products.controls; let i = index;">
+      <div fxFlex="100" [formGroupName]="i" fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-form-field fxFlex="30" appearance="fill">
+          <mat-select (selectionChange)="selectionChange($event, i)" placeholder="Selecione um produto"
+            formControlName="item">
+            <ng-container *ngFor="let pl of productList; let ind = index">
+              <mat-option *ngIf="pl.selected == false || pl.selectedBy == i" [value]="ind">
+                {{pl.name}}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-error *ngIf="!isControlValid(i, 'item')">
+            Selecione um produto na lista
+          </mat-error>
+        </mat-form-field>
+        <button mat-button type="button" color="primary" (click)="inc(i, -1)">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <mat-form-field fxFlex="10">
+          <input matInput type="number" placeholder="Quantidade" formControlName="amount">
+          <mat-error *ngIf="!isControlValid(i, 'amount')">
+            Quantidade inválida
+          </mat-error>
+        </mat-form-field>
+        <button mat-button type="button" color="primary" (click)="inc(i, 1)">
+          <mat-icon>add</mat-icon>
+        </button>
+        <mat-form-field fxFlex="30">
+          <input matInput placeholder="Preço" formControlName="price" mask="separator.2" prefix="R$ ">
+          <mat-error *ngIf="!isControlValid(i, 'price')">
+            {{returnErrorMsgPrice(i, 'price')}}
+          </mat-error>
+        </mat-form-field>
+        <button [disabled]="!isItemSelected(i)" (click)="suggestPrice(i)" mat-button type="button" color="primary">preço
+          sugerido
+        </button>
+
+        <button [disabled]="i == 0" mat-button type="button" color="primary" (click)="removeProduct(i)">excluir</button>
+      </div>
+    </ng-container>
+    <button [disabled]="itensInList == productList.length" mat-button type="button" color="primary"
+      (click)="addProduct()">adicionar
+    </button>
+
+    <div fxFlex="70" fxLayout="column" fxLayoutAlign="end end">
+      <h2>Valor Total: {{total | currency: 'R$ '}}</h2>
+    </div>
+    <div fxFlex="100" fxLayout="column" fxLayoutAlign="end end">
+      <button class="btn-submit" mat-raised-button color="primary" type="submit">
+        Solicitar compra
+      </button>
+    </div>
+
+  </div>
+</div>

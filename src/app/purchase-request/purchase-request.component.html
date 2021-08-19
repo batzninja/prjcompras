@@ -1,0 +1,53 @@
+<div layout="column" layout-fill>
+  <div align="center" layout="row" layout-align="center center">
+
+    <mat-card class="mat-elevation-z8" flex="80" style="margin-top: 60px; width: 1000px;">
+
+      <mat-card-title>Solicitação de Compra</mat-card-title>
+      <mat-card-subtitle>
+      </mat-card-subtitle>
+
+      <mat-card-content fxLayout="column" fxLayoutAlign="stretch">
+
+        <form [formGroup]="productForm" fxLayout="column" fxLayoutAlign="space-around start" (ngSubmit)="submit()">
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between begin">
+            <mat-form-field fxFlex="40">
+              <input matInput type="text" placeholder="Comprador" formControlName="buyerName">
+              <mat-error *ngIf="productForm.controls.buyerName.hasError('required')">
+                Este campo é obrigatório.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="45">
+              <input matInput type="text" placeholder="CPF/CNPJ" formControlName="cpfCnpj" mask="CPF_CNPJ">
+              <mat-error *ngIf="productForm.controls.cpfCnpj.hasError('required')">
+                Este campo é obrigatório.
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="space-around start" fxLayoutGap="20px" >
+            <h4>Produtos</h4>
+          </div>
+
+          <app-product [productFormParent]="productForm" (priceChange)="priceWasChanged($event)">
+          </app-product>
+
+        </form>
+
+      </mat-card-content>
+      <mat-card-footer class="space">
+        <div fxFlex="100" fxLayoutAlign="center center">
+          <mat-chip-list aria-label="Fish selection">
+            <mat-chip *ngIf="priceChanged == 1" color="warn" selected> Solicitação de compra efetuada</mat-chip>
+            <mat-chip *ngIf="priceChanged == 0" color="accent" selected> Compra efetuada com sucesso</mat-chip>
+          </mat-chip-list>
+        </div>
+      </mat-card-footer>
+    </mat-card>
+
+
+
+  </div>
+</div>
